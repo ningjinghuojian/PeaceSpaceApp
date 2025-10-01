@@ -7,5 +7,5 @@ https://github.com/chartjs/Chart.js/releases/tag/v4.4.8
 
 thanks to chart.js & fontawesome
 you may search the url below to know more about them
-chartjs.cn 
-fontawesome.com
+https://chartjs.cn 
+https://fontawesome.com
