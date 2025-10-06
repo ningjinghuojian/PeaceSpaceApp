@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Codeforces | 宁静空间</title>
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <script src="../node_modules/chart.js/dist/chart.umd.js"></script>
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/algorithm.css">
+</head>
+<body>
+    <!-- 下拉刷新容器 -->
+    <div id="pullRefresh" class="pull-refresh">
+        <i class="fa fa-arrow-down"></i>
+        <span>下拉刷新</span>
+    </div>
+
+    <!-- 英雄区域 -->
+    <section id="cf-home" class="hero cf-hero">
+        <div class="container">
+            <div class="hero-content cf-hero-content">
+                <div class="cf-profile">
+                    <img src="../images/codeforces.webp" alt="Codeforces" class="cf-logo">
+                    <h1>PeaceRocket</h1>
+                    <div class="cf-rating">
+                        <span class="rating-value" id="currentRating">--</span>
+                        <span class="rating-title" id="ratingTitle">未评级</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 统计数据部分 -->
+    <section class="cf-stats">
+        <div class="container">
+            <h2>我的统计</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fa fa-check-circle"></i>
+                    <div class="stat-info">
+                        <div class="stat-number" id="solvedProblems">--</div>
+                        <div class="stat-label">已解决题目</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fa fa-trophy"></i>
+                    <div class="stat-info">
+                        <div class="stat-number" id="contestAwards">0</div>
+                        <div class="stat-label">比赛获奖</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fa fa-calendar"></i>
+                    <div class="stat-info">
+                        <div class="stat-number" id="contestCount">--</div>
+                        <div class="stat-label">参与比赛</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 评级趋势 -->
+    <section class="cf-rating-trend">
+        <div class="container">
+            <h2>评级趋势</h2>
+            <div class="chart-container">
+                <canvas id="ratingChart"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- 提交活动日历 -->
+    <section class="cf-calendar">
+        <div class="container">
+            <h2>提交活动日历</h2>
+            <div class="calendar-container" id="calendarContainer">
+                <div class="calendar-header">
+                    <div class="date-selector">
+                        <label for="yearSelect">年份:</label>
+                        <select id="yearSelect"></select>
+                        
+                        <label for="monthSelect">月份:</label>
+                        <select id="monthSelect">
+                            <option value="0">1月</option>
+                            <option value="1">2月</option>
+                            <option value="2">3月</option>
+                            <option value="3">4月</option>
+                            <option value="4">5月</option>
+                            <option value="5">6月</option>
+                            <option value="6">7月</option>
+                            <option value="7">8月</option>
+                            <option value="8">9月</option>
+                            <option value="9">10月</option>
+                            <option value="10">11月</option>
+                            <option value="11">12月</option>
+                        </select>
+                    </div>
+                    
+                    <div class="month-display">
+                        <h3 id="currentMonthDisplay"></h3>
+                    </div>
+                </div>
+                
+                <!-- 星期标签 -->
+                <div class="weekday-labels" id="weekdayLabels">
+                    <div class="weekday">日</div>
+                    <div class="weekday">一</div>
+                    <div class="weekday">二</div>
+                    <div class="weekday">三</div>
+                    <div class="weekday">四</div>
+                    <div class="weekday">五</div>
+                    <div class="weekday">六</div>
+                </div>
+                
+                <!-- 日历矩阵 -->
+                <div class="calendar" id="calendar">
+     
+                </div>
+                
+                <!-- 提交活跃度说明 -->
+                <div class="activity-legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #ebedf0;"></div>
+                        <span>0 次提交</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #9be9a8;"></div>
+                        <span>1-3 次提交</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #40c463;"></div>
+                        <span>4-6 次提交</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #30a14e;"></div>
+                        <span>7-9 次提交</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #216e39;"></div>
+                        <span>10+ 次提交</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 最近提交 -->
+    <section class="cf-submissions">
+        <div class="container">
+            <h2>最近提交</h2>
+            <div class="submissions-list" id="submissionsContainer">
+                <div class="loading">加载提交记录中...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 底部导航栏 -->
+    <nav class="bottom-nav">
+        <a href="projects.html" class="nav-item" data-page="projects">
+            <i class="fa fa-folder"></i>
+            <span>项目</span>
+        </a>
+        <a href="articles.html" class="nav-item" data-page="articles">
+            <i class="fa fa-file-text"></i>
+            <span>文章</span>
+        </a>
+        <a href="../index.html" class="nav-item home-btn">
+            <i class="fa fa-home"></i>
+            <span>首页</span>
+        </a>
+        <a href="algorithm.html" class="nav-item active" data-page="algorithm">
+            <i class="fa fa-code"></i>
+            <span>算法</span>
+        </a>
+        <a href="videos.html" class="nav-item" data-page="videos">
+            <i class="fa fa-video-camera"></i>
+            <span>视频</span>
+        </a>
+    </nav>
+
+    <script src="../js/algorithm.js"></script>
+</body>
+</html>

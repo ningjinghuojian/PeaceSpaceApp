@@ -1,0 +1,376 @@
+/* 下拉刷新样式 */
+.pull-refresh {
+    position: fixed;
+    top: -50px;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: #64748b;
+    transition: top 0.3s ease;
+    z-index: 100;
+}
+
+.pull-refresh.active {
+    top: 0;
+}
+
+.pull-refresh.loading i {
+    animation: spin 1s linear infinite;
+}
+
+.pull-refresh i {
+    margin-bottom: 5px;
+    font-size: 1.2rem;
+}
+
+/* Codeforces页面专属样式 */
+.cf-hero {
+    background-color: #f0f4f8;
+    background-image: none;
+    padding: 2rem 0;
+    min-height: auto;
+}
+
+.cf-hero-content {
+    display: flex;
+    justify-content: center;
+}
+
+.cf-profile {
+    text-align: center;
+    padding: 2rem 1rem;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 350px;
+}
+
+.cf-logo {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1.5rem;
+    border-radius: 50%;
+    background-color: #f1f5f9;
+    padding: 10px;
+}
+
+.cf-rating {
+    margin-top: 1rem;
+}
+
+.rating-value {
+    display: inline-block;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #3b82f6;
+    margin-right: 0.5rem;
+}
+
+.rating-title {
+    display: inline-block;
+    background-color: #e0f2fe;
+    color: #0284c7;
+    padding: 0.2rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+/* 统计数据样式 */
+.cf-stats {
+    background-color: white;
+    padding: 3rem 0;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.stat-card {
+    background-color: #f8fafc;
+    border-radius: 10px;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.stat-card i {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.stat-number {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+}
+
+.stat-label {
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+/* 评级趋势样式 */
+.cf-rating-trend {
+    background-color: #f8fafc;
+    padding: 3rem 0;
+}
+
+.chart-container {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    margin-top: 1.5rem;
+    height: 300px;
+}
+
+/* 提交活动日历样式 */
+.cf-calendar {
+    background-color: white;
+    padding: 3rem 0;
+}
+
+.calendar-container {
+    background-color: #f8fafc;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    margin-top: 1.5rem;
+}
+
+.calendar-header {
+    margin-bottom: 1.5rem;
+}
+
+.date-selector {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.date-selector label {
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+.date-selector select {
+    padding: 0.4rem 0.8rem;
+    border-radius: 5px;
+    border: 1px solid #cbd5e1;
+    background-color: white;
+}
+
+.month-display {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.month-display h3 {
+    font-size: 1.3rem;
+    color: var(--dark-color);
+    margin-bottom: 0;
+}
+
+.weekday-labels {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.weekday {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #64748b;
+    padding: 0.5rem 0;
+}
+
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.day:hover {
+    transform: scale(1.1);
+    z-index: 10;
+}
+
+.day.other-month {
+    background-color: #f1f5f9;
+    opacity: 0.3;
+}
+
+.day.today {
+    border: 2px solid var(--primary-color);
+}
+
+/* 提交活跃度图例 */
+.activity-legend {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+}
+
+/* 提交记录样式 */
+.cf-submissions {
+    background-color: #f8fafc;
+    padding: 3rem 0 6rem;
+}
+
+.submissions-list {
+    margin-top: 1.5rem;
+}
+
+.submission-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #f1f5f9;
+    background-color: white;
+}
+
+.submission-item:first-child {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.submission-item:last-child {
+    border-bottom: none;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.submission-info {
+    flex: 1;
+}
+
+.submission-problem {
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+}
+
+.submission-time {
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+.submission-status {
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.status-accepted {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--secondary-color);
+}
+
+.status-wrong {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.status-pending {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+}
+
+/* 日历提示框 */
+.tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--dark-color);
+    color: white;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    z-index: 100;
+    display: none;
+}
+
+.day:hover .tooltip {
+    display: block;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .stat-card:nth-child(3) {
+        grid-column: 1 / 3;
+    }
+    
+    .day {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .rating-value {
+        font-size: 1.8rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .stat-card:nth-child(3) {
+        grid-column: 1;
+    }
+    
+    .activity-legend {
+        gap: 0.5rem;
+    }
+    
+    .legend-item {
+        font-size: 0.7rem;
+    }
+}

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>我的项目 | 宁静空间</title>
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/projects.css">
+</head>
+<body>
+    
+
+    <!-- 页面标题 -->
+    <section class="page-content" id="page-content">
+        <div class="container">
+            <div class="page-header">
+                <h1>我的项目</h1>
+                <p>探索我的开发作品和创意实践</p>
+            </div>
+
+            <!-- 下拉刷新容器 -->
+            <div id="pull-refresh-container">
+                <div id="refresh-indicator" class="refresh-indicator">
+                    <i class="fa fa-arrow-down"></i>
+                    <span id="refresh-text">下拉刷新</span>
+                </div>
+            </div>
+
+            <!-- 项目筛选和搜索区域 -->
+            <section class="project-filters">
+                <div class="filter-controls">
+                    <div class="search-box">
+                        <input type="text" id="project-search" placeholder="搜索项目...">
+                        <button id="search-btn"><i class="fa fa-search"></i></button>
+                    </div>
+                    
+                    <div class="category-filters">
+                        <select id="category-filter">
+                            <option value="">所有分类</option>
+                            <option value="Web应用">Web应用</option>
+                            <option value="游戏展馆">游戏展馆</option>
+                            <option value="智能3d设计">智能3d设计</option>
+                        </select>
+                        <select id="status-filter">
+                            <option value="">所有状态</option>
+                            <option value="已上线">已上线</option>
+                            <option value="已完成">已完成</option>
+                        </select>
+                        <button id="reset-filter">重置</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 项目列表 -->
+            <section class="projects">
+                <div class="projects-list" id="projects-container">
+                    <!-- 项目将通过JavaScript动态加载 -->
+                    <div class="loading">
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x"></i>
+                        <p>加载中...</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <!-- 底部导航栏 -->
+    <nav class="bottom-nav">
+        <a href="projects.html" class="nav-item active" data-page="projects">
+            <i class="fa fa-folder"></i>
+            <span>项目</span>
+        </a>
+        <a href="articles.html" class="nav-item" data-page="articles">
+            <i class="fa fa-file-text"></i>
+            <span>文章</span>
+        </a>
+        <a href="../index.html" class="nav-item home-btn">
+            <i class="fa fa-home"></i>
+            <span>首页</span>
+        </a>
+        <a href="algorithm.html" class="nav-item" data-page="algorithm">
+            <i class="fa fa-code"></i>
+            <span>算法</span>
+        </a>
+        <a href="videos.html" class="nav-item" data-page="videos">
+            <i class="fa fa-video-camera"></i>
+            <span>视频</span>
+        </a>
+    </nav>
+
+    <script src="../js/projects.js"></script>
+</body>
+</html>
