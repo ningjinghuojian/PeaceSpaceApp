@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>我的文章 | 宁静空间</title>
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/articles.css">
+</head>
+<body>
+    <section class="page-content">
+        <div class="container">
+            <div class="page-header">
+                <h1>技术文章</h1>
+                <p>分享开发经验与学习心得</p>
+            </div>
+
+            <section class="article-filters">
+                <div class="filter-controls">
+                    <div class="search-box">
+                        <input type="text" id="article-search" placeholder="搜索文章...">
+                        <button id="search-btn"><i class="fa fa-search"></i></button>
+                    </div>
+                    
+                    <div class="category-filters">
+                        <select id="category-level-1">
+                            <option value="">一级分类</option>
+                        </select>
+                        <select id="category-level-2">
+                            <option value="">二级分类</option>
+                        </select>
+                        <select id="category-level-3">
+                            <option value="">三级分类</option>
+                        </select>
+                        <button id="reset-filter">重置</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="all-articles">
+                <div class="articles-list" id="all-articles">
+                    <div class="loading">
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x"></i>
+                        <p>正在加载文章...</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <nav class="bottom-nav">
+        <a href="projects.html" class="nav-item" data-page="projects">
+            <i class="fa fa-folder"></i>
+            <span>项目</span>
+        </a>
+        <a href="articles.html" class="nav-item active" data-page="articles">
+            <i class="fa fa-file-text"></i>
+            <span>文章</span>
+        </a>
+        <a href="../index.html" class="nav-item home-btn">
+            <i class="fa fa-home"></i>
+            <span>首页</span>
+        </a>
+        <a href="algorithm.html" class="nav-item" data-page="algorithm">
+            <i class="fa fa-code"></i>
+            <span>算法</span>
+        </a>
+        <a href="videos.html" class="nav-item" data-page="videos">
+            <i class="fa fa-video-camera"></i>
+            <span>视频</span>
+        </a>
+    </nav>
+
+    <script src="../js/articles.js"></script>
+</body>
+</html>

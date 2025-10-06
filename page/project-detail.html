@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>项目详情 | 宁静空间</title>
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/index.css"> <!-- 全局样式 -->
+    <link rel="stylesheet" href="../css/project-detail.css">
+</head>
+<body>
+    <!-- 安卓风格顶部导航栏 -->
+    <header class="android-top-nav">
+        <button class="back-button" onclick="goBack()">
+            <i class="fa fa-arrow-left"></i>
+        </button>
+        <h1 class="nav-title">项目详情</h1>
+        <div class="nav-actions">
+            <!-- 可添加其他操作按钮 -->
+        </div>
+    </header>
+
+    <!-- 页面内容区 -->
+    <section class="page-content">
+        <div class="container">
+            <!-- 加载状态 -->
+            <div class="loading">
+                <i class="fa fa-circle-o-notch fa-spin fa-3x"></i>
+                <p>正在加载项目...</p>
+            </div>
+            
+            <!-- 项目内容（默认隐藏） -->
+            <div class="project-content" id="project-content" style="display: none;">
+                <!-- 项目标题区域 -->
+                <div class="project-header">
+                    <h1 id="project-title"></h1>
+                    <p class="project-meta">
+                        <span><i class="fa fa-folder"></i> <span id="project-category"></span></span>
+                        <span><i class="fa fa-calendar"></i> <span id="project-duration"></span></span>
+                        <span><i class="fa fa-check-circle"></i> <span id="project-status"></span></span>
+                    </p>
+                    
+                    <!-- 技术栈标签 -->
+                    <div class="tech-stack" id="project-tech-stack"></div>
+                    
+                    <!-- 项目链接 -->
+                    <div class="project-links" id="project-links"></div>
+                </div>
+
+                <!-- 项目图片画廊 -->
+                <div class="project-gallery">
+                    <img src="" alt="项目图片" class="gallery-image" id="main-gallery-image">
+                    <div class="gallery-nav" id="gallery-thumbs"></div>
+                </div>
+
+                <!-- 项目简介 -->
+                <div class="section">
+                    <h2>项目简介</h2>
+                    <p id="project-description"></p>
+                </div>
+
+                <!-- 功能模块 -->
+                <div class="section">
+                    <h2>功能模块</h2>
+                    <div class="features-grid" id="project-features"></div>
+                </div>
+
+                <!-- 项目贡献情况 -->
+                <div class="section">
+                    <h2>项目贡献情况</h2>
+                    <div class="contribution-chart-container">
+                        <div class="calendar-header">
+                            <div class="year-selector">
+                                <label for="projectYearSelect">选择年份:</label>
+                                <select id="projectYearSelect">
+                                    <!-- 年份选项将通过JavaScript动态添加 -->
+                                </select>
+                            </div>
+                            
+                            <div class="month-selector">
+                                <label for="projectMonthSelect">选择月份:</label>
+                                <select id="projectMonthSelect">
+                                    <option value="all">所有月份</option>
+                                    <option value="0">1月</option>
+                                    <option value="1">2月</option>
+                                    <option value="2">3月</option>
+                                    <option value="3">4月</option>
+                                    <option value="4">5月</option>
+                                    <option value="5">6月</option>
+                                    <option value="6">7月</option>
+                                    <option value="7">8月</option>
+                                    <option value="8">9月</option>
+                                    <option value="9">10月</option>
+                                    <option value="10">11月</option>
+                                    <option value="11">12月</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="calendar" id="projectCalendar">
+                            <!-- 日历内容将通过JavaScript动态生成 -->
+                        </div>
+                        
+                        <div class="month-labels" id="projectMonthLabels">
+                            <!-- 月份标签将通过JavaScript动态生成 -->
+                        </div>
+                        
+                        <div class="stats" id="projectStats">
+                            <!-- 统计数据将通过JavaScript动态生成 -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 挑战与解决方案 -->
+                <div class="section">
+                    <h2>挑战与解决方案</h2>
+                    <p id="project-challenges"></p>
+                </div>
+
+                <!-- 开发日志模块 -->
+                <div class="section development-logs">
+                    <h2>开发日志</h2>
+                    <div id="logs-container">
+                        <!-- 日志将通过JavaScript动态加载 -->
+                        <div class="loading">加载日志中...</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 错误状态（默认隐藏） -->
+            <div class="error" style="display: none;">
+                <i class="fa fa-exclamation-triangle"></i>
+                <p>加载项目失败</p>
+                <p id="error-message" style="font-size: 0.9rem; margin-top: 0.5rem;"></p>
+                <p style="font-size: 0.8rem; margin-top: 1rem;">
+                    <button onclick="loadProjectDetail()" style="padding: 5px 10px; margin: 5px;">重试</button>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 外部资源 -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@16.2.0/lib/marked.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    
+    <!-- 自定义脚本 -->
+    <script src="../js/project-detail.js"></script>
+</body>
+</html>

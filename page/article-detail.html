@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>文章详情 | 宁静空间</title>
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/index.css"> <!-- 全局样式 -->
+    <link rel="stylesheet" href="../css/article-detail.css">
+</head>
+<body>
+    <!-- 安卓风格顶部导航栏 -->
+    <header class="android-top-nav">
+        <button class="back-button" onclick="goBack()">
+            <i class="fa fa-arrow-left"></i>
+        </button>
+        <h1 class="nav-title">文章详情</h1>
+        <div class="nav-actions">
+            <!-- 可添加其他操作按钮 -->
+        </div>
+    </header>
+
+    <!-- 页面内容区 -->
+    <section class="page-content">
+        <div class="container">
+            <!-- 加载状态 -->
+            <div class="loading">
+                <i class="fa fa-circle-o-notch fa-spin fa-3x"></i>
+                <p>正在加载文章...</p>
+            </div>
+            
+            <!-- 文章内容（默认隐藏） -->
+            <div class="article-content" id="article-content" style="display: none;">
+                <!-- 文章标题区域 -->
+                <div class="article-header">
+                    <h1 id="article-title"></h1>
+                    <p class="article-meta">
+                        <span><i class="fa fa-calendar"></i> <span id="article-date"></span></span>
+                        <span><i class="fa fa-tag"></i> <span id="article-tag"></span></span>
+                        <span><i class="fa fa-clock-o"></i> 阅读时间: <span id="article-readTime"></span></span>
+                    </p>
+                </div>
+
+                <!-- 文章目录（移动端可折叠） -->
+                <div class="toc-container">
+                    <div class="toc-header">
+                        <h3>文章目录 <i class="fa fa-chevron-down"></i></h3>
+                    </div>
+                    <div class="toc-content" id="article-toc">
+                        <!-- 目录将通过JS生成 -->
+                    </div>
+                </div>
+
+                <!-- 文章主体内容 -->
+                <div class="article-main">
+                    <div id="article-markdown-content"></div>
+                </div>
+            </div>
+            
+            <!-- 错误状态（默认隐藏） -->
+            <div class="error" style="display: none;">
+                <i class="fa fa-exclamation-triangle"></i>
+                <p>加载文章失败</p>
+                <p id="error-message" style="font-size: 0.9rem; margin-top: 0.5rem;"></p>
+                <p style="font-size: 0.8rem; margin-top: 1rem;">
+                    <button onclick="loadArticleDetail()" style="padding: 5px 10px; margin: 5px;">重试</button>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 外部资源 -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@16.2.0/lib/marked.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    
+    <!-- 自定义脚本 -->
+    <script src="../js/article-detail.js"></script>
+</body>
+</html>
