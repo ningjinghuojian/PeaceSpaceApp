@@ -1,3 +1,6 @@
+// 基础API地址
+const BASE_API_URL = 'https://frp-boy.com:52171';
+
 // 下拉刷新相关变量
 let startY = 0;
 let moveY = 0;
@@ -32,6 +35,53 @@ function showError(message) {
     document.getElementById('project-content').style.display = 'none';
     document.querySelector('.error').style.display = 'block';
     document.getElementById('error-message').textContent = message;
+}
+
+// 解析图片路径获取API参数
+function parseImagePath(imagePath) {
+    // 默认参数
+    const defaultParams = {
+        imagesType: 'projects',
+        id: `${new Date().getFullYear()}${(new Date().getMonth()+1).toString().padStart(2,'0')}${new Date().getDate().toString().padStart(2,'0')}01`,
+        title: '默认图片'
+    };
+    
+    // 检查路径是否有效
+    if (!imagePath || typeof imagePath !== 'string' || !imagePath.startsWith('/images/')) {
+        console.warn('无效的图片路径，使用默认参数:', imagePath);
+        return defaultParams;
+    }
+    
+    try {
+        // 移除开头的/images/
+        const pathWithoutRoot = imagePath.replace(/^\/images\//, '');
+        // 分割路径部分
+        const pathParts = pathWithoutRoot.split('/');
+        
+        // 路径格式应为: [imagesType]/[id]/[title].webp
+        if (pathParts.length >= 3) {
+            const imagesType = pathParts[0];
+            const id = pathParts[1];
+            // 拼接剩余部分作为标题（处理可能包含/的标题）
+            const fileNameWithExt = pathParts.slice(2).join('/');
+            // 移除.webp扩展名
+            const title = fileNameWithExt.replace(/\.webp$/i, '');
+            
+            // 验证imagesType是否有效
+            if (!['projects', 'articles'].includes(imagesType)) {
+                console.warn('无效的imagesType:', imagesType);
+                return defaultParams;
+            }
+            
+            return { imagesType, id, title };
+        } else {
+            console.warn('图片路径格式不正确:', imagePath);
+            return defaultParams;
+        }
+    } catch (error) {
+        console.error('解析图片路径出错:', error);
+        return defaultParams;
+    }
 }
 
 // 生成技术栈标签
@@ -71,22 +121,40 @@ function generateProjectLinks(project) {
     }
 }
 
-// 生成图片画廊
+// 生成图片画廊（核心修改：使用API获取图片）
 function generateGallery(images) {
     const mainImage = document.getElementById('main-gallery-image');
     const thumbContainer = document.getElementById('gallery-thumbs');
     
+    // 清空容器
+    thumbContainer.innerHTML = '';
+    
+    // 处理图片URL，通过API获取
+    const processedImages = images.map(imgPath => {
+        // 解析图片路径获取参数
+        const { imagesType, id, title: imageTitle } = parseImagePath(imgPath);
+        // 构造API URL
+        return `${BASE_API_URL}/api/images/${imagesType}/${id}?title=${encodeURIComponent(imageTitle)}`;
+    });
+    
     // 设置主图
-    if (images && images.length > 0) {
-        mainImage.src = images[0];
+    if (processedImages && processedImages.length > 0) {
+        mainImage.src = processedImages[0];
         mainImage.alt = '项目图片';
         
         // 生成缩略图
-        images.forEach((img, index) => {
+        processedImages.forEach((img, index) => {
             const thumb = document.createElement('img');
             thumb.src = img;
             thumb.alt = `项目图片 ${index + 1}`;
             thumb.className = `gallery-thumb ${index === 0 ? 'active' : ''}`;
+            
+            // 图片加载失败处理
+            thumb.onerror = function() {
+                // 如果没有图片，隐藏画廊
+                document.querySelector('.project-gallery').style.display = 'none';
+            };
+            
             thumb.addEventListener('click', () => {
                 mainImage.src = img;
                 // 更新激活状态
@@ -99,6 +167,11 @@ function generateGallery(images) {
         // 如果没有图片，隐藏画廊
         document.querySelector('.project-gallery').style.display = 'none';
     }
+    
+    // 主图加载失败处理
+    mainImage.onerror = function() {
+        this.src = 'https://picsum.photos/seed/project/800/600';
+    };
 }
 
 // 生成功能模块
@@ -337,32 +410,30 @@ function generateContributionChart(project, developmentLogs) {
     renderCalendar(year);
 }
 
-// 从Gitee获取项目数据
-async function fetchProjectsFromGitee() {
+// 从API获取项目数据
+async function fetchProjectsFromAPI() {
     try {
-        // 使用Gitee的raw文件链接
-        const response = await fetch('https://frp-boy.com:52171/api/data/projects');
+        const response = await fetch(`${BASE_API_URL}/api/data/projects`);
         if (!response.ok) {
             throw new Error(`HTTP错误: ${response.status}`);
         }
         return await response.json();
     } catch (error) {
-        console.error('从Gitee获取项目数据失败:', error);
+        console.error('从API获取项目数据失败:', error);
         throw error;
     }
 }
 
-// 从Gitee获取文章数据
-async function fetchArticlesFromGitee() {
+// 从API获取文章数据
+async function fetchArticlesFromAPI() {
     try {
-        // 使用Gitee的raw文件链接
-        const response = await fetch('https://frp-boy.com:52171/api/data/articles');
+        const response = await fetch(`${BASE_API_URL}/api/data/articles`);
         if (!response.ok) {
             throw new Error(`HTTP错误: ${response.status}`);
         }
         return await response.json();
     } catch (error) {
-        console.error('从Gitee获取文章数据失败:', error);
+        console.error('从API获取文章数据失败:', error);
         throw error;
     }
 }
@@ -372,8 +443,8 @@ async function loadDevelopmentLogs(projectTag) {
     const logsContainer = document.getElementById('logs-container');
     
     try {
-        // 从Gitee获取文章数据
-        const articles = await fetchArticlesFromGitee();
+        // 从API获取文章数据
+        const articles = await fetchArticlesFromAPI();
         
         // 筛选与项目tag匹配的文章
         const matchedLogs = articles.filter(article => 
@@ -421,8 +492,8 @@ async function loadDevelopmentLogs(projectTag) {
 // 获取相关文章数据
 async function getRelatedArticles(projectTag) {
     try {
-        // 从Gitee获取文章数据
-        const articles = await fetchArticlesFromGitee();
+        // 从API获取文章数据
+        const articles = await fetchArticlesFromAPI();
         // 筛选与项目标签相关的文章
         return articles.filter(article => article.tag && article.tag.includes(projectTag));
     } catch (error) {
@@ -445,8 +516,8 @@ async function loadProjectDetail(forceRefresh = false) {
         document.getElementById('project-content').style.display = 'none';
         document.querySelector('.error').style.display = 'none';
         
-        // 从Gitee获取项目数据
-        const projects = await fetchProjectsFromGitee();
+        // 从API获取项目数据
+        const projects = await fetchProjectsFromAPI();
         const project = projects.find(p => p.id.toString() === projectId.toString());
         
         if (!project) {
@@ -472,7 +543,7 @@ async function loadProjectDetail(forceRefresh = false) {
         // 生成项目链接
         generateProjectLinks(project);
         
-        // 生成图片画廊
+        // 生成图片画廊（使用API获取图片）
         generateGallery(project.images || []);
         
         // 生成功能模块
