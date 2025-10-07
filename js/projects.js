@@ -1,3 +1,6 @@
+// 基础API地址
+const BASE_API_URL = 'https://frp-boy.com:52171';
+
 // 存储所有项目数据
 let allProjects = [];
 
@@ -332,12 +335,12 @@ function loadProjects(forceRefresh = false) {
         clearCache();
     }
     
-    // Gitee仓库数据路径
-    const giteeRawUrl = 'https://frp-boy.com:52171/api/data/projects';
-    console.log('请求Gitee数据路径:', giteeRawUrl);
+    // 后端项目数据接口
+    const projectsApiUrl = `${BASE_API_URL}/api/data/projects`;
+    console.log('请求项目数据接口:', projectsApiUrl);
     
     // 返回Promise以便下拉刷新处理
-    return fetch(giteeRawUrl)
+    return fetch(projectsApiUrl)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP错误: ${response.status}`);
@@ -360,11 +363,11 @@ function loadProjects(forceRefresh = false) {
             return Promise.resolve();
         })
         .catch(error => {
-            console.error('从Gitee加载项目失败:', error);
+            console.error('加载项目数据失败:', error);
             const projectsContainer = document.getElementById('projects-container');
             if (projectsContainer) {
                 projectsContainer.innerHTML = 
-                    '<div class="error"><i class="fa fa-exclamation-circle"></i><p>从Gitee加载项目失败</p><p>错误信息: ' + error.message + '</p><p>请检查网络连接或稍后重试</p><button onclick="loadProjects(true)" style="margin-top:10px;padding:5px 10px;">重试</button></div>';
+                    '<div class="error"><i class="fa fa-exclamation-circle"></i><p>加载项目数据失败</p><p>错误信息: ' + error.message + '</p><p>请检查网络连接或稍后重试</p><button onclick="loadProjects(true)" style="margin-top:10px;padding:5px 10px;">重试</button></div>';
             }
             return Promise.reject(error);
         });
@@ -447,6 +450,53 @@ function renderProjects(projects) {
     });
 }
 
+// 解析图片路径获取API参数
+function parseImagePath(imagePath) {
+    // 默认参数
+    const defaultParams = {
+        imagesType: 'projects',
+        id: `${new Date().getFullYear()}${(new Date().getMonth()+1).toString().padStart(2,'0')}${new Date().getDate().toString().padStart(2,'0')}01`,
+        title: '默认图片'
+    };
+    
+    // 检查路径是否有效
+    if (!imagePath || typeof imagePath !== 'string' || !imagePath.startsWith('/images/')) {
+        console.warn('无效的图片路径，使用默认参数:', imagePath);
+        return defaultParams;
+    }
+    
+    try {
+        // 移除开头的/images/
+        const pathWithoutRoot = imagePath.replace(/^\/images\//, '');
+        // 分割路径部分
+        const pathParts = pathWithoutRoot.split('/');
+        
+        // 路径格式应为: [imagesType]/[id]/[title].webp
+        if (pathParts.length >= 3) {
+            const imagesType = pathParts[0];
+            const id = pathParts[1];
+            // 拼接剩余部分作为标题（处理可能包含/的标题）
+            const fileNameWithExt = pathParts.slice(2).join('/');
+            // 移除.webp扩展名
+            const title = fileNameWithExt.replace(/\.webp$/i, '');
+            
+            // 验证imagesType是否有效
+            if (!['projects', 'articles'].includes(imagesType)) {
+                console.warn('无效的imagesType:', imagesType);
+                return defaultParams;
+            }
+            
+            return { imagesType, id, title };
+        } else {
+            console.warn('图片路径格式不正确:', imagePath);
+            return defaultParams;
+        }
+    } catch (error) {
+        console.error('解析图片路径出错:', error);
+        return defaultParams;
+    }
+}
+
 // 创建项目卡片
 function createProjectCard(project, index) {
     const projectCard = document.createElement('div');
@@ -455,20 +505,27 @@ function createProjectCard(project, index) {
     projectCard.setAttribute('data-status', project.status || '');
     projectCard.setAttribute('data-tag', project.tag || '');
     
+    // 解析图片路径获取API参数（核心修改）
+    const { imagesType, id, title: imageTitle } = parseImagePath(project.image);
+    
+    // 构造图片API请求URL
+    const imageApiUrl = `${BASE_API_URL}/api/images/${imagesType}/${id}?title=${encodeURIComponent(imageTitle)}`;
+    console.log('构造的图片请求URL:', imageApiUrl);
+    
     // 安全地处理所有属性
     const safeProject = {
-        id: project.id || index + 1,
+        id: project.id || id, // 使用解析出的id作为项目id
         title: project.title || '未命名项目',
         category: project.category || '未分类',
         status: project.status || '未知状态',
         tag: project.tag || '',
         date: project.date || '未知日期',
         duration: project.duration || '未知周期',
-        image: project.image || 'https://picsum.photos/seed/project/600/400',
+        image: imageApiUrl, // 使用API URL作为图片源
         description: project.description || '暂无描述',
         techStack: Array.isArray(project.techStack) ? project.techStack : [],
         features: Array.isArray(project.features) ? project.features : [],
-        link: 'project-detail.html?id=' + (project.id || index + 1),
+        link: `project-detail.html?id=${encodeURIComponent(project.id || id)}`,
         github: project.github || '',
         challenges: project.challenges || ''
     };
@@ -494,7 +551,7 @@ function createProjectCard(project, index) {
         ).join('')
         : '<div class="feature-item">暂无特点描述</div>';
     
-    // 设置图片错误处理
+    // 图片加载失败兜底
     const imgOnError = `this.onerror=null;this.src='https://picsum.photos/seed/project/600/400';`;
     
     projectCard.innerHTML = `
@@ -534,13 +591,11 @@ function createProjectCard(project, index) {
 function getMarkdownContent(markdownPath) {
     if (!markdownPath) return Promise.reject(new Error('Markdown路径不能为空'));
     
-    // 将blob路径转换为raw路径
-    const rawUrl = markdownPath.replace('gitee.com', 'gitee.com/raw')
-                              .replace('/blob/', '/raw/');
+    // 通过后端API获取Markdown内容
+    const mdApiUrl = `${BASE_API_URL}/api/articles?title=${encodeURIComponent(markdownPath)}`;
+    console.log('获取Markdown内容，API路径:', mdApiUrl);
     
-    console.log('获取Markdown内容，路径:', rawUrl);
-    
-    return fetch(rawUrl)
+    return fetch(mdApiUrl)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`获取Markdown内容失败: ${response.status}`);
